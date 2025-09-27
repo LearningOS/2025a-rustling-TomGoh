@@ -9,6 +9,8 @@
 // Execute `rustlings hint clippy1` or use the `hint` watch subcommand for a
 // hint.
 
+use std::f32;
+
 fn main() {
     let pi = std::f32::consts::PI;
     let radius = 5.00f32;
