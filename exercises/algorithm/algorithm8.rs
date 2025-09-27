@@ -50,13 +50,13 @@ impl<T> Default for Queue<T> {
     }
 }
 
-pub struct myStack<T>
+pub struct MyStack<T>
 {
 	//TODO
 	q1:Queue<T>,
 	q2:Queue<T>
 }
-impl<T> myStack<T> {
+impl<T> MyStack<T> {
     pub fn new() -> Self {
         Self {
 			//TODO
@@ -74,17 +74,19 @@ impl<T> myStack<T> {
 
         // Move all elements except the last one from q1 to q2
         while self.q1.size() > 1 {
-            let elem = self.q1.dequeue().unwrap();
-            self.q2.enqueue(elem);
+            if let Ok(elem) = self.q1.dequeue() {
+                self.q2.enqueue(elem);
+            }
         }
 
         // The last element in q1 is our result
-        let result = self.q1.dequeue();
-
-        // Swap q1 and q2
-        std::mem::swap(&mut self.q1, &mut self.q2);
-
-        result
+        if let Ok(result) = self.q1.dequeue() {
+            // Swap q1 and q2
+            std::mem::swap(&mut self.q1, &mut self.q2);
+            Ok(result)
+        } else {
+            Err("Stack is empty")
+        }
     }
     pub fn is_empty(&self) -> bool {
         self.q1.is_empty()
@@ -97,7 +99,7 @@ mod tests {
 	
 	#[test]
 	fn test_queue(){
-		let mut s = myStack::<i32>::new();
+		let mut s = MyStack::<i32>::new();
 		assert_eq!(s.pop(), Err("Stack is empty"));
         s.push(1);
         s.push(2);
